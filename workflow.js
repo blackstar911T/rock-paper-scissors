@@ -2,62 +2,85 @@
 function getComputerChoice(){
     let randomNumber = Math.random();
     if(randomNumber < 0.33){
-        return 'Rock'
+        return 'rock'
     }else if(randomNumber <0.66){
-        return 'Paper'
+        return 'paper'
     }else{
-        return 'Scissors'
+        return 'scissors'
     }
 }
 
 let playerCount = 0;
 let computerCount = 0;
 
+const para = document.createElement("p")
+const div = document.querySelector("#part")
+const count = document.getElementById("heading")
 
-function gameRound(){
-    let playerSelection = prompt("Pick between: Rock, Paper or Scissors").toLowerCase()
-    let computerSelection = getComputerChoice().toLowerCase()
-    console.log(computerSelection);
+function gameRound(playerSelection){
+    let computerSelection = getComputerChoice()
+    
+    function win(computerSelection){
+        para.textContent = `You win! ${playerSelection}  beats ${computerSelection}`
+        div.appendChild(para)
+        playerCount++
+        updateCountDisplay()}
+
+    function lose(computerSelection){
+        para.textContent = `You lose! ${computerSelection} beats ${playerSelection}`
+        div.appendChild(para)
+        computerCount++
+        updateCountDisplay()}
+    
+    
     if(playerSelection === 'rock'){
         if(computerSelection === 'paper'){
-            computerCount++
-            return "You lose! Paper beats Rock"
+            return lose(computerSelection)
         }else if(computerSelection === 'scissors'){
-            playerCount++
-            return "You win! Rock beats Scissors"
+            return win(computerSelection)
         }else{
-            return gameRound();
+            return gameRound(playerSelection);
         }
     }else if(playerSelection === 'paper'){
         if(computerSelection === 'scissors'){
-            computerCount++
-            return "You lose! Scissors beats Paper"
+            return lose(computerSelection)
         }else if(computerSelection === 'rock'){
-            playerCount++
-            return "You win! Paper beats Rock"
+            return win(computerSelection)
         }else{
-            return gameRound();
+            return gameRound(playerSelection);
         }
     }else{
         if(computerSelection === 'rock'){
-            computerCount++
-            return "You lose! Rock beats Scissors"
+            return  lose(computerSelection)
         }else if(computerSelection === 'paper'){
-            playerCount++
-            return "You win! Scissors beats Paper"
+            return win(computerSelection)
         }else{
-           return gameRound();
+           return gameRound(playerSelection);
         }
     }
 }
-
-function game(){
-    while (playerCount < 5 && computerCount  < 5){
-        console.log(gameRound());
-
+function updateCountDisplay() {
+    count.textContent = `Player ${playerCount} and Computer:${computerCount}`;
+    if(playerCount === 5){
+        para.textContent = "The player wins!"
+        count.appendChild(para)
+    }else if(computerCount === 5){
+        para.textContent = "The computer wins!"
+        count.appendChild(para)
     }
-
-    (playerCount === 5) ? console.log("You win the overall match"): "You lose the overall match"
 }
 
-game();
+
+const buttonRock = document.getElementById("rock")
+const buttonPaper = document.getElementById("paper")
+const buttonScissors = document.getElementById("scissors")
+
+buttonRock.addEventListener("click",() =>{ 
+                                if(playerCount < 5 && computerCount  < 5 ){ 
+                                    gameRound("rock")}})
+buttonPaper.addEventListener("click",() =>{if(playerCount < 5 && computerCount  < 5)
+                                            {gameRound("paper")}})
+buttonScissors.addEventListener("click",() =>{if(playerCount < 5 && computerCount  < 5){gameRound("scissors")}})
+
+
+
